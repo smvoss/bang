@@ -21,3 +21,4 @@ jobs:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
           WAGO_PROJECT_ID: O67j9YN3
           WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
