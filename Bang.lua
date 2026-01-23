@@ -35,8 +35,14 @@ local function ChatTypeFromEvent(event)
   return t
 end
 
+-- Remove any non-ASCII bytes to avoid malformed UTF-8 crashes.
+local function SanitizeMessage(msg)
+  -- Lua patterns can choke on ranges with NUL; strip bytes 0x80-0xFF instead.
+  return (msg:gsub("[\128-\255]", ""))
+end
+
 local function TransformMessage(msg)
-  msg = msg:gsub("!", "")
+  msg = SanitizeMessage(msg:gsub("!", ""))
   if msg == "" then return nil end
 
   if msg == "penis" then
