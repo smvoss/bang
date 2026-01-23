@@ -12,6 +12,7 @@ permissions:
 jobs:
   package:
     runs-on: ubuntu-latest
+    environment: WAGO_API_TOKEN
     steps:
       - name: Checkout
         uses: actions/checkout@v4
