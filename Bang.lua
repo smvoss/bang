@@ -25,8 +25,14 @@ local function StartsWith(str, prefix)
   return type(str) == "string" and str:sub(1, #prefix) == prefix
 end
 
+-- Map Blizzard event names to SendChatMessage chat types
 local function ChatTypeFromEvent(event)
-  return event:match("^CHAT_MSG_([^_]+)")
+  local t = event:match("^CHAT_MSG_(.+)")
+  if not t then return nil end
+  -- Strip leader variants (e.g., PARTY_LEADER -> PARTY)
+  t = t:gsub("_LEADER$", "")
+  -- Instance groups use INSTANCE_CHAT, not PARTY
+  return t
 end
 
 local function TransformMessage(msg)
@@ -48,8 +54,6 @@ local function TransformMessage(msg)
   end
 end
 
--- Register slash commands immediately on file load.
--- Use a unique key to avoid collisions with other addons.
 SLASH_BANG_STANDALONE1 = "/bang"
 SLASH_BANG_STANDALONE2 = "/bangaddon"
 SlashCmdList["BANG_STANDALONE"] = function(cmd)
@@ -62,12 +66,8 @@ SlashCmdList["BANG_STANDALONE"] = function(cmd)
     SetEnabled(not IsEnabled())
   elseif cmd == "status" then
     Print("Currently: " .. (IsEnabled() and "ON" or "OFF"))
-  elseif cmd == "debug" then
-    Print("Debug: enabled=" .. tostring(IsEnabled()))
-    Print("Slash debug: " .. tostring(_G.SLASH_BANG_STANDALONE1) .. ", " .. tostring(_G.SLASH_BANG_STANDALONE2))
-    Print("Handler exists: " .. tostring(SlashCmdList["BANG_STANDALONE"] ~= nil))
   else
-    Print("Commands: /bang [toggle|on|off|status|debug]")
+    Print("Commands: /bang [toggle|on|off|status]")
   end
 end
 
@@ -77,10 +77,10 @@ local EVENTS = {
   "CHAT_MSG_PARTY_LEADER",
   "CHAT_MSG_RAID",
   "CHAT_MSG_RAID_LEADER",
+  "CHAT_MSG_INSTANCE_CHAT",
+  "CHAT_MSG_INSTANCE_CHAT_LEADER",
   "CHAT_MSG_GUILD",
-  "CHAT_MSG_OFFICER",
-  "CHAT_MSG_BATTLEGROUND",
-  "CHAT_MSG_BATTLEGROUND_LEADER",
+  "CHAT_MSG_OFFICER"
 }
 
 local f = CreateFrame("Frame")

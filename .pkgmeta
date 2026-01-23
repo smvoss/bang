@@ -1,0 +1,6 @@
+package-as: Bang
+
+ignore:
+  - .gitignore
+  - .github
+  - .release

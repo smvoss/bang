@@ -1,4 +1,4 @@
-## Interface: 110200
+## Interface: 120000
 ## Title: Bang
 ## Notes: Standalone port of the WeakAura "!bang" (chat bang transformer)
 ## Author: Converted by ChatGPT
