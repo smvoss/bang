@@ -93,7 +93,7 @@ local f = CreateFrame("Frame")
 for _, e in ipairs(EVENTS) do f:RegisterEvent(e) end
 f:SetScript("OnEvent", function(_, event, msg)
   if not IsEnabled() then return end
-  if not msg or not StartsWith(msg, "!") then return end
+  if not msg or issecretvalue(msg) or not StartsWith(msg, "!") then return end
   local chatType = ChatTypeFromEvent(event)
   if not chatType then return end
   local out = TransformMessage(msg)
